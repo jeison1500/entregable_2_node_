@@ -20,10 +20,12 @@ exports.findAllRepair = async (req, res) => {
 
 exports.createRepair = async (req, res) => {
   try {
-    const { date, usersId } = req.body;
+    const { date, motorsNumber, description, usersId } = req.body;
 
     const repair = await Repair.create({
       date,
+      motorsNumber,
+      description,
       usersId,
     });
 
@@ -44,21 +46,7 @@ exports.createRepair = async (req, res) => {
 
 exports.findOneRepair = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const repair = await Repair.findOne({
-      where: {
-        id,
-        status: 'pending',
-      },
-    });
-
-    if (!repair) {
-      return res.status(404).json({
-        status: 'error',
-        message: 'Repair not found',
-      });
-    }
+    const { repair } = req;
 
     return res.status(200).json({
       status: 'success',
@@ -77,22 +65,7 @@ exports.findOneRepair = async (req, res) => {
 
 exports.updateRepair = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    const repair = await Repair.findOne({
-      where: {
-        id,
-        status: 'pending',
-      },
-    });
-
-    if (!repair) {
-      return res.status(404).json({
-        status: 'error',
-        message: 'Repair not found',
-      });
-    }
+    const { repair } = req;
 
     await repair.update({ status: 'completed' });
 
@@ -113,23 +86,7 @@ exports.updateRepair = async (req, res) => {
 
 exports.deleteRepair = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    const repair = await Repair.findOne({
-      where: {
-        id,
-        status: 'pending',
-      },
-    });
-
-    if (!repair) {
-      return res.status(404).json({
-        status: 'error',
-        message: 'Repair not found',
-      });
-    }
-
+    const { repair } = req;
     await repair.update({ status: 'cancelled' });
 
     return res.status(200).json({

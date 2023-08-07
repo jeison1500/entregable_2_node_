@@ -12,6 +12,15 @@ const Repair = db.define('repairs', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  motorsNumber: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'motors_number',
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
   status: {
     type: DataTypes.ENUM('pending', 'completed', 'cancelled'),
     allowNull: false,
