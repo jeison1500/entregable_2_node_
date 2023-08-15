@@ -1,32 +1,37 @@
+const catchAsync = require('./../utils/catchAsync');
+const { db } = require('./../database/config');
+
 const Repair = require('./../models/models.repairs');
+const User = require('./../models/model.users');
 
-exports.findAllRepair = async (req, res) => {
-  try {
-    const repairs = await Repair.findAll({ where: { status: 'pending' } });
+exports.findAllRepair = catchAsync(async (req, res) => {
+  const repairs = await Repair.findAll({
+    where: {
+      status: 'pending',
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['name', 'email', 'role'],
+      },
+    ],
+  });
 
-    return res.status(200).json({
-      status: 'success',
-      repairs,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
-      error,
-    });
-  }
-};
+  return res.status(200).json({
+    status: 'success',
+    repairs,
+  });
+});
 
 exports.createRepair = async (req, res) => {
   try {
-    const { date, motorsNumber, description, usersId } = req.body;
+    const { date, motorsNumber, description, userId } = req.body;
 
     const repair = await Repair.create({
       date,
       motorsNumber,
       description,
-      usersId,
+      userId,
     });
 
     return res.status(201).json({

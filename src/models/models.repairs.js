@@ -26,10 +26,9 @@ const Repair = db.define('repairs', {
     allowNull: false,
     defaultValue: 'pending',
   },
-  usersId: {
+  userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    field: 'users_id',
   },
 });
 
