@@ -51,3 +51,15 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
+
+exports.protectAccountOwner = catchAsync(async (req, res, next) => {
+  const { user, sessionUser } = req;
+
+  if (user.id !== sessionUser.id) {
+    return next(
+      new AppError('You do not have permission to perform this action', 403)
+    );
+  }
+
+  next();
+});
